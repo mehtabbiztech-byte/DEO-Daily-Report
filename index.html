@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f8ff">
+<title>GS ERP — DEO Daily Report</title>
+<style>
+:root{--ink:#17243b;--muted:#70809a;--line:#e6ebf3;--blue:#315fce;--blue2:#204bab;--pale:#edf3ff;--green:#168664;--bg:#f5f8fc;--white:#fff;--shadow:0 14px 40px rgba(26,52,95,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+.topbar{height:70px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(calc((100vw - 1180px)/2),22px);position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:12px;font-weight:750;letter-spacing:-.3px}.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#4779e8,#234db4);display:grid;place-items:center;color:#fff;font-size:18px;box-shadow:0 5px 12px #315fce35}.brand small{display:block;font-size:11px;font-weight:650;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase}.top-right{display:flex;gap:14px;align-items:center;color:var(--muted);font-size:13px}.status{display:flex;align-items:center;gap:7px;background:#f2faf7;color:#187d60;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:650}.dot{width:7px;height:7px;background:#26aa7d;border-radius:100%}
+main{width:min(1180px,calc(100% - 40px));margin:32px auto 60px}.intro{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:22px;gap:20px}.eyebrow{font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);margin:0 0 8px}.intro h1{margin:0;font-size:clamp(27px,4vw,36px);line-height:1.12;letter-spacing:-1.25px}.intro p{margin:9px 0 0;color:var(--muted);max-width:560px}.date-chip{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;color:#4c5c75;font-size:13px;font-weight:650}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.identity{padding:22px 24px;margin-bottom:19px}.panel-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.panel-heading h2{margin:0;font-size:16px;letter-spacing:-.25px}.hint{color:var(--muted);font-size:12px}
+.identity-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:13px}.field-label{display:block;color:#52627c;font-weight:650;font-size:12px;margin:0 0 7px}.control{width:100%;height:44px;border:1px solid #dce3ed;border-radius:10px;background:white;padding:0 12px;color:var(--ink);outline:none;transition:.15s}.control:focus,.count-input:focus{border-color:#5d83e4;box-shadow:0 0 0 3px #315fce17}.control::placeholder{color:#a3adbc}
+.section-label{display:flex;justify-content:space-between;align-items:center;margin:24px 1px 12px}.section-label h2{font-size:16px;margin:0;letter-spacing:-.25px}.section-label span{font-size:12px;color:var(--muted)}
+.modules{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:11px}
+.module{border:1px solid var(--line);background:#fff;border-radius:15px;text-align:left;padding:14px 13px;min-height:107px;transition:.18s;position:relative;color:var(--ink)}.module:hover{border-color:#aebff0;transform:translateY(-2px);box-shadow:0 8px 20px #315fce12}.module.active{border:1.5px solid var(--blue);background:#f6f8ff;box-shadow:0 0 0 3px #315fce10}.module-top{display:flex;justify-content:space-between;align-items:center}.module-icon{width:32px;height:32px;border-radius:10px;background:var(--pale);color:var(--blue);display:grid;place-items:center;font-size:16px}.module.active .module-icon{background:var(--blue);color:#fff}.module h3{font-size:13px;margin:10px 0 3px;font-weight:750}.module small{font-size:11px;color:var(--muted)}.module-total{font-size:11px;color:#66758c;font-weight:700}
+.entry-panel{margin-top:17px;overflow:hidden}.entry-head{padding:20px 23px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.entry-title{display:flex;gap:12px;align-items:center}.entry-title .module-icon{width:40px;height:40px;font-size:19px}.entry-title h2{font-size:18px;margin:0;letter-spacing:-.4px}.entry-title p{margin:3px 0 0;font-size:12px;color:var(--muted)}.small-btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 11px;color:#53637b;font-size:12px;font-weight:650}.small-btn:hover{background:#f6f8fb}
+.entry-body{padding:22px 23px 25px}.count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.count-card{padding:13px 13px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;min-height:101px}.count-card label{display:flex;justify-content:space-between;gap:6px;color:#52627c;font-size:12px;font-weight:650;min-height:34px}.count-card label span:last-child{font-size:10px;color:#a0aabb;font-weight:500}.count-input{width:100%;height:39px;padding:0 11px;margin-top:6px;border:1px solid #dfe5ee;border-radius:9px;outline:none;font-size:15px;font-weight:700;color:var(--ink);background:#fbfcfe}
+.ftf-groups{display:grid;grid-template-columns:1fr 1fr;gap:17px}.subgroup{border:1px solid var(--line);border-radius:14px;overflow:hidden}.subgroup h3{margin:0;padding:13px 15px;background:#f7f9fd;border-bottom:1px solid var(--line);font-size:13px;display:flex;justify-content:space-between}.subgroup h3 span{font-size:11px;color:var(--muted);font-weight:500}.subgroup .count-grid{padding:13px;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.subgroup .count-card{min-height:91px}
+.submitbar{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:17px;border-top:1px solid var(--line);gap:15px}.submit-note{font-size:12px;color:var(--muted)}.actions{display:flex;gap:9px}.btn{height:42px;padding:0 17px;border-radius:10px;border:1px solid var(--line);background:#fff;color:#53637b;font-size:13px;font-weight:700}.btn-primary{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 5px 12px #315fce26}.btn-primary:hover{background:var(--blue2)}.btn:hover:not(.btn-primary){background:#f6f8fb}
+.lower-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:17px;margin-top:18px}.summary{padding:20px 22px}.summary h2{font-size:15px;margin:0}.summary-sub{font-size:12px;color:var(--muted);margin:4px 0 16px}.summary-list{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.summary-item{border:1px solid var(--line);border-radius:11px;padding:12px}.summary-item span{display:block;color:var(--muted);font-size:11px}.summary-item strong{display:block;margin-top:5px;font-size:18px}.summary-item.total{background:#f3f6ff;border-color:#dbe4ff}.summary-item.total strong{color:var(--blue)}
+.history{padding:20px 22px}.history-top{display:flex;justify-content:space-between;align-items:center}.history-top h2{font-size:15px;margin:0}.text-btn{border:0;background:none;color:var(--blue);font-size:12px;font-weight:700;padding:5px}.history-empty{color:var(--muted);font-size:12px;padding:19px 0 4px}.history-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eff2f6;font-size:12px}.history-row:last-child{border:0}.history-row strong{display:block;font-size:12px}.history-row span{color:var(--muted)}.history-amount{font-weight:750;color:var(--blue)}
+.footer{text-align:center;padding:24px 0;color:#98a3b4;font-size:11px}.toast{position:fixed;right:22px;bottom:22px;padding:13px 17px;background:#17243b;color:white;border-radius:11px;box-shadow:0 12px 30px #17243b35;font-size:13px;z-index:10;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:950px){.modules{grid-template-columns:repeat(3,1fr)}.identity-grid{grid-template-columns:repeat(2,1fr)}.count-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:650px){.topbar{height:61px;padding:0 16px}.top-right .status{display:none}main{width:calc(100% - 24px);margin:23px auto 40px}.intro{display:block}.date-chip{display:inline-block;margin-top:13px}.identity{padding:17px}.identity-grid{gap:10px}.modules{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.module{min-height:99px;padding:12px}.entry-head{padding:16px}.entry-body{padding:15px}.count-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ftf-groups{grid-template-columns:1fr}.subgroup .count-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lower-grid{grid-template-columns:1fr}.summary,.history{padding:17px}.submitbar{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .btn{flex:1}.summary-list{gap:6px}.summary-item{padding:10px 8px}.summary-item strong{font-size:16px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="brand-mark">GS</div><div>GS ERP<small>Daily Operations</small></div></div>
+  <div class="top-right"><span>Data Entry Operator</span><span class="status"><i class="dot"></i>Ready to report</span></div>
+</header>
+<main>
+  <div class="intro">
+    <div><p class="eyebrow">Daily activity log</p><h1>DEO Daily Report</h1><p>Record today’s ERP transactions in a few taps. Choose an operation, enter counts, and save your daily report.</p></div>
+    <div class="date-chip" id="todayLabel">Today</div>
+  </div>
+
+  <section class="panel identity" aria-labelledby="identityTitle">
+    <div class="panel-heading"><h2 id="identityTitle">Your report details</h2><span class="hint">Complete once for this report</span></div>
+    <div class="identity-grid">
+      <div><label class="field-label" for="deoName">DEO name <span style="color:#d55353">*</span></label><input class="control" id="deoName" placeholder="Enter your name" autocomplete="name" required></div>
+      <div><label class="field-label" for="entryDate">Entry date</label><input class="control" id="entryDate" type="date" required></div>
+      <div><label class="field-label" for="location">Location</label><select class="control" id="location"><option value="">Select location</option><option>PQ</option><option>Gharo</option><option>SKP2</option><option>Other</option></select></div>
+      <div><label class="field-label" for="shift">Shift</label><select class="control" id="shift"><option value="">Select shift</option><option>Morning</option><option>Evening</option><option>Night</option><option>General</option></select></div>
+    </div>
+  </section>
+
+  <div class="section-label"><h2>Choose an operation</h2><span>Tap a card to enter transaction counts</span></div>
+  <nav class="modules" id="moduleNav" aria-label="ERP operations"></nav>
+  <section class="panel entry-panel" id="entryPanel" aria-live="polite"></section>
+
+  <div class="lower-grid">
+    <section class="panel summary">
+      <h2>Report totals</h2><p class="summary-sub">Counts entered across all operation tabs</p>
+      <div class="summary-list">
+        <div class="summary-item"><span>Sections started</span><strong id="startedCount">0 / 6</strong></div>
+        <div class="summary-item"><span>Entries recorded</span><strong id="entryCount">0</strong></div>
+        <div class="summary-item total"><span>Total transactions</span><strong id="totalCount">0</strong></div>
+      </div>
+    </section>
+    <section class="panel history">
+      <div class="history-top"><h2>Recent reports</h2><button class="text-btn" id="exportBtn" type="button">Export CSV ↓</button></div>
+      <div id="historyList"></div>
+    </section>
+  </div>
+  <div class="footer">GS ERP · DEO Daily Report · Counts are saved in this browser</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function(){
+"use strict";
+const operations=[
+{id:"arrival",name:"Arrival Operations",short:"Arrival",icon:"⇣",subtitle:"Purchase and local arrivals",fields:[["token_receipts","Token Receipts"],["inspection_1","Inspection (1st)"],["igp","IGP"],["weighment_1","Weighment (1st)"],["inspection_2","Inspection (2nd)"],["weighment_2","Weighment (2nd)"],["grn","GRN"],["ogp","OGP"]]},
+{id:"ftf",name:"FTF Transfer",short:"FTF Transfer",icon:"⇄",subtitle:"Factory-to-factory send and receive",groups:[{name:"Send",fields:[["ftf_send_token_igp","Token / IGP"],["ftf_send_weighment_1","1st Weighment"],["ftf_send_inspection","Inspection"],["ftf_send_weighment_2","2nd Weighment"],["ftf_send_gdn","GDN"],["ftf_send_ogp","OGP"]]},{name:"Receive",fields:[["ftf_receive_token_igp","Token / IGP"],["ftf_receive_weighment_1","1st Weighment"],["ftf_receive_inspection","Inspection"],["ftf_receive_weighment_2","2nd Weighment"],["ftf_receive_grn","GRN"],["ftf_receive_ogp","OGP"]]}]},
+{id:"rtf",name:"Return to Factory",short:"Return to Factory",icon:"↶",subtitle:"Factory return transactions",fields:[["rtf_token_igp","Token / IGP"],["rtf_weighment_1","1st Weighment"],["rtf_weighment_2","2nd Weighment"],["rtf_grn","GRN"],["rtf_ogp","OGP"]]},
+{id:"production",name:"Production",short:"Production",icon:"⚙",subtitle:"Manufacturing and repacking",fields:[["manufacturing_order","Manufacturing Order"],["repacking","Repacking"]]},
+{id:"sales",name:"Local Sales",short:"Local Sales",icon:"▣",subtitle:"Local sales order to dispatch",fields:[["sales_order","Sales Order"],["sales_token_igp","Token / IGP"],["sales_weighment_1","1st Weighment"],["sales_weighment_2","2nd Weighment"],["sales_gdn","GDN"],["sales_ogp","OGP"]]},
+{id:"export",name:"Export",short:"Export",icon:"⇧",subtitle:"Export gate and dispatch transactions",fields:[["export_igp_gate_in","IGP — Gate In"],["export_weighment_1","1st Weighment"],["export_weighment_2","2nd Weighment"],["export_ogp_gate_out","OGP — Gate Out"],["export_gdn_out","Export GDN (OUT)"]]}
+];
+const values={};let active="arrival";let reports=[];
+const $=id=>document.getElementById(id);
+const dateInput=$("entryDate");
+const dateLocal=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+dateInput.value=dateLocal;
+$("todayLabel").textContent=new Date().toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+try{reports=JSON.parse(localStorage.getItem("gs-deo-reports")||"[]");}catch(e){reports=[];}
+const readMeta=()=>({name:$("deoName").value.trim(),date:dateInput.value,location:$("location").value,shift:$("shift").value});
+function saveLocal(){try{localStorage.setItem("gs-deo-reports",JSON.stringify(reports));}catch(e){}}
+function allFields(){let out=[];operations.forEach(op=>{if(op.fields)out=out.concat(op.fields);if(op.groups)op.groups.forEach(g=>out=out.concat(g.fields));});return out;}
+function sumFields(fields){return fields.reduce((n,f)=>n+(Number(values[f[0]])||0),0);}
+function opCount(op){return sumFields(op.fields||op.groups.reduce((a,g)=>a.concat(g.fields),[]));}
+function countCards(fields){return '<div class="count-grid">'+fields.map(f=>'<div class="count-card"><label for="'+f[0]+'">'+f[1]+'<span>COUNT</span></label><input class="count-input" id="'+f[0]+'" type="number" inputmode="numeric" min="0" step="1" placeholder="0" value="'+(values[f[0]]||"")+'" aria-label="'+f[1]+' count"></div>').join("")+'</div>';}
+function renderNav(){ $("moduleNav").innerHTML=operations.map(op=>'<button type="button" class="module '+(active===op.id?"active":"")+'" data-op="'+op.id+'" aria-pressed="'+(active===op.id)+'"><div class="module-top"><span class="module-icon">'+op.icon+'</span><span class="module-total">'+opCount(op)+'</span></div><h3>'+op.short+'</h3><small>'+op.subtitle+'</small></button>').join("");}
+function renderEntry(){const op=operations.find(x=>x.id===active);let body="";
+if(op.groups){body='<div class="ftf-groups">'+op.groups.map(g=>'<div class="subgroup"><h3>'+g.name+'<span>'+sumFields(g.fields)+' entries</span></h3>'+countCards(g.fields)+'</div>').join("")+'</div>';}
+else body=countCards(op.fields);
+$("entryPanel").innerHTML='<div class="entry-head"><div class="entry-title"><span class="module-icon">'+op.icon+'</span><div><h2>'+op.name+'</h2><p>'+op.subtitle+'</p></div></div><button class="small-btn" type="button" id="clearSection">Clear this section</button></div><div class="entry-body">'+body+'<div class="submitbar"><span class="submit-note">Enter the number of transactions for each step. Leave unused items at 0.</span><div class="actions"><button class="btn" type="button" id="resetAll">Reset all</button><button class="btn btn-primary" type="button" id="saveReport">Save daily report</button></div></div></div>';
+$("entryPanel").querySelectorAll(".count-input").forEach(input=>input.addEventListener("input",()=>{values[input.id]=input.value===""?"":Math.max(0,Math.floor(Number(input.value)||0));if(input.value!==values[input.id])input.value=values[input.id];renderNav();renderSummary();}));
+$("clearSection").addEventListener("click",()=>clearOperation(op));
+$("resetAll").addEventListener("click",resetAll);
+$("saveReport").addEventListener("click",saveReport);
+}
+function renderSummary(){const fs=allFields();const entered=fs.filter(f=>values[f[0]]!==undefined&&values[f[0]]!==""&&Number(values[f[0]])>0).length;const started=operations.filter(op=>opCount(op)>0).length;const total=fs.reduce((n,f)=>n+(Number(values[f[0]])||0),0);$("startedCount").textContent=started+" / 6";$("entryCount").textContent=entered;$("totalCount").textContent=total;}
+function clearOperation(op){const fs=op.fields||op.groups.reduce((a,g)=>a.concat(g.fields),[]);fs.forEach(f=>delete values[f[0]]);renderNav();renderEntry();renderSummary();showToast(op.name+" cleared");}
+function resetAll(){allFields().forEach(f=>delete values[f[0]]);renderNav();renderEntry();renderSummary();showToast("All counts reset");}
+function saveReport(){const m=readMeta();if(!m.name){$("deoName").focus();showToast("Please enter your DEO name");return;}if(!m.date){dateInput.focus();showToast("Please select the entry date");return;}const counts={};allFields().forEach(f=>counts[f[0]]=Number(values[f[0]])||0);const total=Object.keys(counts).reduce((n,k)=>n+counts[k],0);const report={id:Date.now(),...m,counts,total,savedAt:new Date().toISOString()};reports.unshift(report);saveLocal();renderHistory();showToast("Daily report saved on this device");}
+function renderHistory(){const host=$("historyList");if(!reports.length){host.innerHTML='<div class="history-empty">Your saved daily reports will appear here.</div>';return;}host.innerHTML=reports.slice(0,4).map(r=>'<div class="history-row"><div><strong>'+escapeHtml(r.name)+' · '+escapeHtml(r.location||"Location not set")+'</strong><span>'+escapeHtml(r.date)+' · '+escapeHtml(r.shift||"Shift not set")+'</span></div><span class="history-amount">'+r.total+' entries</span></div>').join("");}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function showToast(text){const t=$("toast");t.textContent=text;t.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.classList.remove("show"),2600);}
+$("moduleNav").addEventListener("click",e=>{const b=e.target.closest("[data-op]");if(!b)return;active=b.dataset.op;renderNav();renderEntry();});
+$("exportBtn").addEventListener("click",()=>{if(!reports.length){showToast("Save a report before exporting");return;}const fields=allFields();const headers=["Entry Date","DEO Name","Location","Shift"].concat(fields.map(f=>f[1]),["Total Transactions"]);const rows=reports.map(r=>[r.date,r.name,r.location,r.shift].concat(fields.map(f=>r.counts[f[0]]||0),[r.total]));const csv=[headers,...rows].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download="GS_ERP_DEO_Daily_Reports.csv";a.click();URL.revokeObjectURL(a.href);});
+$("deoName").addEventListener("input",e=>localStorage.setItem("gs-deo-last-name",e.target.value));
+$("deoName").value=localStorage.getItem("gs-deo-last-name")||"";
+renderNav();renderEntry();renderSummary();renderHistory();
+})();
+</script>
+</body>
+</html>
